@@ -89,9 +89,9 @@ class app_cubit extends Cubit<app_states> {
     required String? time,
     required int? color,
     required int id,
-  }) async {
-    await database!.rawInsert(
-        'UPDATE note SET body =?,date=?,time=?,color=?, WHERE id =?',
+  }) {
+    database!.rawUpdate(
+        'UPDATE note SET body =?,date=?,time=?,color=? WHERE id =?',
         ['$body', '$date', '$time', '$color', id]).then((value) {
       emit(AppUpdateDataBase());
     }).catchError((error) {

@@ -49,15 +49,19 @@ class edit_note extends StatelessWidget {
           duration: const Duration(seconds: 3),
           backgroundColor: Color(cubit.choosed_color),
         );
-        cubit.body_controller.text = body;
-        cubit.date_controller.text = date;
-        cubit.time_controller.text = time;
+        var body_controller = TextEditingController();
+        var date_controller = TextEditingController();
+        var time_controller = TextEditingController();
+        body_controller.text = body;
+        date_controller.text = date;
+        time_controller.text = time;
         index_of_color_in_color_list = cubit.choosed_color;
-        String? dateChangingValue;
-        String? bodyChangingValue;
-        String? timeChangingValue;
+        // String? dateChangingValue;
+        // String? bodyChangingValue;
+        // String? timeChangingValue;
         var width = MediaQuery.of(context).size.width;
         var height = MediaQuery.of(context).size.height;
+
         return Scaffold(
           backgroundColor: Colors.grey[900],
           body: SafeArea(
@@ -111,25 +115,16 @@ class edit_note extends StatelessWidget {
                                         primary: Colors.grey,
                                       ),
                                       onPressed: () {
-                                        print(cubit.index_of_choosed_color);
-                                        if (cubit
-                                            .body_controller.text.isEmpty) {
+                                        if (body_controller.text.isEmpty) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(snakBar);
                                         } else {
-                                          print(index_of_color_in_color_list);
-                                          cubit.body_controller.text =
-                                              bodyChangingValue!;
-                                          cubit.date_controller.text =
-                                              dateChangingValue!;
-                                          cubit.time_controller.text =
-                                              timeChangingValue!;
                                           cubit.update_record_database(
-                                            body: cubit.body_controller.text,
-                                            date: cubit.date_controller.text,
-                                            time: cubit.time_controller.text,
-                                            color: cubit.choosed_color,
-                                            id: cubit.note[index]['id'],
+                                            body: body_controller.text,
+                                            date: date_controller.text,
+                                            time: time_controller.text,
+                                            color: index_of_color_in_color_list,
+                                            id: id,
                                           );
                                           Navigator.pop(context);
                                         }
@@ -247,10 +242,9 @@ class edit_note extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 15.0, vertical: 10),
                                   child: TextField(
-                                    controller: cubit.body_controller,
+                                    controller: body_controller,
                                     onEditingComplete: () {
-                                      cubit.body_controller.text =
-                                          bodyChangingValue!;
+                                      body_controller.text = body;
                                     },
                                     onChanged: (value) {
                                       body = value;
@@ -283,14 +277,14 @@ class edit_note extends StatelessWidget {
                                           lastDate:
                                               DateTime.parse('2025-02-09'),
                                         ).then((value) {
-                                          cubit.date_controller.text =
+                                          date_controller.text =
                                               DateFormat.yMMMd().format(value!);
                                         });
                                       },
                                       style: ElevatedButton.styleFrom(
                                         primary: Colors.grey[400],
                                       ),
-                                      child: cubit.date_controller.text.isEmpty
+                                      child: date_controller.text.isEmpty
                                           ? Row(children: const [
                                               Icon(Icons
                                                   .calendar_today_outlined),
@@ -305,8 +299,7 @@ class edit_note extends StatelessWidget {
                                               const SizedBox(
                                                 width: 10,
                                               ),
-                                              Text(
-                                                  "${cubit.date_controller.text}"),
+                                              Text("${date_controller.text}"),
                                             ]),
                                     ),
                                   ),
@@ -320,14 +313,14 @@ class edit_note extends StatelessWidget {
                                           context: context,
                                           initialTime: TimeOfDay.now(),
                                         ).then((value) {
-                                          cubit.time_controller.text =
+                                          time_controller.text =
                                               value!.format(context).toString();
                                         });
                                       },
                                       style: ElevatedButton.styleFrom(
                                         primary: Colors.grey[400],
                                       ),
-                                      child: cubit.time_controller.text.isEmpty
+                                      child: time_controller.text.isEmpty
                                           ? Row(children: const [
                                               Icon(Icons.watch_later_outlined),
                                               SizedBox(
@@ -341,8 +334,7 @@ class edit_note extends StatelessWidget {
                                               const SizedBox(
                                                 width: 10,
                                               ),
-                                              Text(
-                                                  '${cubit.time_controller.text}'),
+                                              Text('${time_controller.text}'),
                                             ]),
                                     ),
                                   ),
